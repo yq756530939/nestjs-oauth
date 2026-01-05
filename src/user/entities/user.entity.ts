@@ -22,7 +22,7 @@ export class User {
   @Column({ comment: '邮箱', nullable: true })
   email: string;
 
-  @Column({ type: 'json', comment: '关联角色', default: [] })
+  @Column({ type: 'json', comment: '关联角色' })
   roles: string[];
 
   @Column({ comment: '状态：1=启用，0=禁用', default: 1 })

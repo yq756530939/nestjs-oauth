@@ -10,7 +10,7 @@ export class AuditLog {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ comment: '操作类型：login/authorize/token' })
+  @Column({ comment: '操作类型：login/authorize/token/revoke/logout' })
   type: string;
 
   @Column({ comment: '用户ID' })
@@ -28,6 +28,5 @@ export class AuditLog {
   @Column({ comment: '错误信息' })
   errorMsg: string;
 
-  @CreateDateColumn({ comment: '创建时间' })
-  createdAt: Date;
+  @CreateDateColumn({ comment: '操作时间' }) createdAt: Date;
 }

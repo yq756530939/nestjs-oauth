@@ -1,14 +1,14 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UserService } from 'src/user/services/user.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly configService: ConfigService,
-    private readonly userService: UserService,
+    private readonly authService: AuthService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -18,8 +18,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    const user = await this.userService.findOneById(payload.sub);
-    if (!user) throw new UnauthorizedException('令牌无效');
-    return user;
+    await this.authService.verifyToken(this._jwtToken);
+    return payload;
+  }
+
+  private _jwtToken: string;
+  private _jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+
+  authenticate(req) {
+    this._jwtToken = this._jwtFromRequest(req);
+    super.authenticate(req);
   }
 }

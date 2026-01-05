@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateClientDto {
   @IsString()
@@ -19,4 +19,8 @@ export class CreateClientDto {
 
   @IsArray()
   scopes?: string[];
+
+  @IsString()
+  @IsOptional()
+  frontChannelLogoutUri?: string;
 }

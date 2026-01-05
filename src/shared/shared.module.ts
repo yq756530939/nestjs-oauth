@@ -14,9 +14,14 @@ import Redis from 'ioredis';
           password: configService.get('REDIS_PASSWORD'),
           db: configService.get('REDIS_DB'),
         });
+        redisClient.on('error', (err) => {
+          console.error('Redis Client error:', err);
+        });
+        return redisClient;
       },
       inject: [ConfigService],
     },
   ],
+  exports: ['REDIS_CLIENT'],
 })
 export class SharedModule {}

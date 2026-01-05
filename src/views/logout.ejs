@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>正在退出登录...</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; text-align: center; padding: 50px; background-color: #f4f7f6; color: #333; }
+        .message { font-size: 1.2em; margin-bottom: 20px; }
+        .spinner { border: 4px solid rgba(0, 0, 0, 0.1); border-radius: 50%; border-top: 4px solid #007bff; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .iframe-container { display: none; }
+    </style>
+</head>
+<body>
+    <div class="message">正在为您退出所有系统，请稍候...</div>
+    <div class="spinner"></div>
+    <div class="iframe-container">
+        <% if (logoutUrls && logoutUrls.length > 0) { %>
+            <% logoutUrls.forEach(function(url) { %>
+                <iframe src="<%= url %>" width="1" height="1" frameborder="0"></iframe>
+            <% }); %>
+        <% } %>
+    </div>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.location.href = '/login?logout=success';
+            }, 3000);
+        };
+    </script>
+</body>
+</html>

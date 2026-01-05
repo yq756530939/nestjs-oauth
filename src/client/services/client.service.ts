@@ -1,8 +1,8 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateClientDto } from '../dto/create-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OauthClient } from '../entities/oauth-client.entity';
-import { Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class ClientService {
@@ -19,6 +19,7 @@ export class ClientService {
 
     const client = this.clientRepo.create({
       ...dto,
+      scopes: dto.scopes || ['openid', 'profile', 'email'],
       clientSecret: OauthClient.hashClientSecret(dto.clientSecret),
     });
     return this.clientRepo.save(client);
@@ -33,7 +34,17 @@ export class ClientService {
     redirectUri: string,
   ): Promise<boolean> {
     const client = await this.findOneByClientId(clientId);
-    if (!client) return false;
-    return client.redirectUris.includes(redirectUri);
+    return client ? client.redirectUris.includes(redirectUri) : false;
+  }
+
+  async findClientsWithLogoutUri(clientIds: string[]): Promise<OauthClient[]> {
+    if (clientIds.length === 0) return [];
+    return this.clientRepo
+      .createQueryBuilder('client')
+      .select(['client.clientId', 'client.frontChannelLogoutUri'])
+      .where('client.clientId IN (:...clientIds)', { clientIds })
+      .andWhere('client.status = :status', { status: 1 })
+      .andWhere('client.frontChannelLogoutUri IS NOT NULL')
+      .getMany();
   }
 }

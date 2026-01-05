@@ -28,6 +28,7 @@ export class UserService {
 
     const user = this.userRepo.create({
       ...dto,
+      roles: dto.roles || [],
       password: this.hashPassword(dto.password),
     });
     return this.userRepo.save(user);

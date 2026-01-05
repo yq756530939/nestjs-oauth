@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  auth-server:
+    build: .
+    container_name: auth-center
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db

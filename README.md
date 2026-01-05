@@ -1,98 +1,245 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Auth Center - 统一身份认证中心
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+基于NestJS构建的企业级统一身份认证和授权管理系统，支持OAuth 2.0、JWT认证、权限管理和审计日志等功能。
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 功能特性
 
-## Description
+- **用户管理**: 用户注册、登录、信息管理
+- **OAuth 2.0客户端管理**: 支持多客户端应用接入
+- **JWT认证**: 安全的访问令牌和刷新令牌机制
+- **权限控制**: 基于角色的权限管理系统
+- **审计日志**: 完整的操作审计记录
+- **Redis缓存**: 高性能的会话和令牌缓存
+- **MySQL数据库**: 可靠的数据存储
+- **OpenID Connect**: 支持标准身份认证协议
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 技术栈
 
-## Project setup
+- **后端框架**: NestJS 11.x
+- **数据库**: MySQL + TypeORM
+- **缓存**: Redis + ioredis
+- **认证**: JWT + Passport
+- **验证**: class-validator + class-transformer
+- **日志**: Winston
+- **测试**: Jest + Supertest
 
-```bash
-$ pnpm install
-```
+## 🛠️ 安装和运行
 
-## Compile and run the project
+### 环境要求
 
-```bash
-# development
-$ pnpm run start
+- Node.js >= 18.x
+- MySQL >= 8.0
+- Redis >= 6.0
+- pnpm >= 8.x
 
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
-```
-
-## Run tests
+### 1. 安装依赖
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm install
 ```
 
-## Deployment
+### 2. 环境配置
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+复制 `.env` 文件并根据需要修改配置：
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# 数据库配置
+DB_HOST=localhost
+DB_PORT=5455
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=unified_auth
+
+# Redis配置
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=your_password
+REDIS_DB=7
+
+# JWT配置
+JWT_SECRET=your-jwt-secret-key
+JWT_ACCESS_TOKEN_EXPIRES_IN=1h
+JWT_REFRESH_TOKEN_EXPIRES_IN=7d
+
+# 应用配置
+PORT=3000
+NODE_ENV=development
+IDP_DOMAIN=http://localhost:3000
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 3. 数据库初始化
 
-## Resources
+确保MySQL数据库已创建，TypeORM会自动创建表结构。
 
-Check out a few resources that may come in handy when working with NestJS:
+### 4. 运行应用
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+# 开发模式（热重载）
+pnpm run start:dev
 
-## Support
+# 生产模式
+pnpm run start:prod
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# 调试模式
+pnpm run start:debug
+```
 
-## Stay in touch
+## 📁 项目结构
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
+auth-center/
+├── src/
+│   ├── auth/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── dto/
+│   │   ├── entities/
+│   │   ├── guards/
+│   │   ├── interceptors/
+│   │   ├── middlewares/
+│   │   ├── strategies/
+│   │   ├── utils/
+│   ├── common/
+│   ├── config/
+│   ├── database/
+│   ├── logger/
+│   ├── main.ts
+├── test/
+├── .env
+├── .env.test
+├── nest-cli.json
+├── package.json
+├── pnpm-lock.yaml
+├── README.md
+├── tsconfig.json
+├── tsconfig.build.json
+```
 
-## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 🔐 API接口
+
+### 认证接口
+
+- `POST /auth/login` - 用户登录
+- `POST /auth/register` - 用户注册
+- `POST /auth/refresh` - 刷新令牌
+- `POST /auth/logout` - 用户登出
+
+### 用户管理接口
+
+- `GET /users` - 获取用户列表
+- `GET /users/:id` - 获取用户详情
+- `PUT /users/:id` - 更新用户信息
+- `DELETE /users/:id` - 删除用户
+
+### 客户端管理接口
+
+- `GET /clients` - 获取客户端列表
+- `POST /clients` - 创建客户端
+- `PUT /clients/:id` - 更新客户端
+- `DELETE /clients/:id` - 删除客户端
+
+### 权限管理接口
+
+- `GET /permissions` - 获取权限列表
+- `POST /permissions` - 创建权限
+- `PUT /permissions/:id` - 更新权限
+
+## 🔧 开发指南
+
+### 代码规范
+
+```bash
+# 代码格式化
+pnpm run format
+
+# 代码检查
+pnpm run lint
+```
+
+### 测试
+
+```bash
+# 单元测试
+pnpm run test
+
+# 测试覆盖率
+pnpm run test:cov
+
+# E2E测试
+pnpm run test:e2e
+
+# 监听模式测试
+pnpm run test:watch
+```
+
+### 构建
+
+```bash
+# 构建项目
+pnpm run build
+```
+
+## 🚢 部署
+
+### Docker部署
+
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN pnpm install --production
+
+COPY dist/ ./dist
+
+EXPOSE 3000
+
+CMD ["node", "dist/main"]
+```
+
+### 环境变量配置
+
+生产环境需要配置以下环境变量：
+
+```bash
+NODE_ENV=production
+DB_HOST=your_production_db_host
+REDIS_HOST=your_production_redis_host
+JWT_SECRET=your_production_jwt_secret
+```
+
+## 📊 监控和日志
+
+项目使用Winston进行日志管理，支持：
+
+- 结构化日志输出
+- 多级别日志（error, warn, info, debug）
+- 日志文件轮转
+- 审计日志记录
+
+## 🔒 安全特性
+
+- 密码加密存储（bcryptjs）
+- JWT令牌安全验证
+- SQL注入防护（TypeORM参数化查询）
+- XSS防护
+- CSRF防护
+- 请求频率限制
+
+## 🤝 贡献指南
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开Pull Request
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+---
+
+**Auth Center** - 为企业提供安全可靠的身份认证解决方案。

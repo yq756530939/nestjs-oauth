@@ -1,4 +1,3 @@
-// src/client/entities/oauth-client.entity.ts
 import {
   Entity,
   Column,
@@ -24,9 +23,7 @@ export class OauthClient {
   @Column({ type: 'json', comment: '允许的重定向URI' })
   redirectUris: string[];
 
-  @Column({
-    type: 'json',
-    default: ['openid', 'profile', 'email'],
+  @Column('json', {
     comment: '允许的权限范围',
   })
   scopes: string[];
