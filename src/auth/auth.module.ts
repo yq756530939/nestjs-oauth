@@ -16,9 +16,9 @@ import { AuditLogModule } from 'src/audit-log/audit-log.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('jwt.secret'),
-        signOptions: {
-          expiresIn: configService.get('jwt.accessTokenExpiresIn'),
-        },
+        // signOptions: {
+        //   expiresIn: configService.get('jwt.accessTokenExpiresIn'),
+        // },
       }),
     }),
     UserModule,

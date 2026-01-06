@@ -7,7 +7,7 @@ import { CreateClientDto } from '../dto/create-client.dto';
 
 @ApiTags('客户端管理')
 @Controller('clients')
-@UseGuards(PermissionGuard)
+// @UseGuards(PermissionGuard)
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 

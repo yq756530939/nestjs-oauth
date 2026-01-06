@@ -25,7 +25,7 @@ export class AuditLog {
   @Column({ comment: '操作结果：success/fail' })
   result: string;
 
-  @Column({ comment: '错误信息' })
+  @Column({ comment: '错误信息', nullable: true })
   errorMsg: string;
 
   @CreateDateColumn({ comment: '操作时间' }) createdAt: Date;

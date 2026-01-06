@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from '../services/auth.service';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,20 +14,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get('jwt.secret'),
+      secretOrKey: configService.get('jwt.secret', ''),
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: any) {
-    await this.authService.verifyToken(this._jwtToken);
+  async validate(req: Request, payload: any) {
+    const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+
+    if (!token) {
+      throw new UnauthorizedException('Token not found in request');
+    }
+
+    await this.authService.verifyToken(token);
     return payload;
-  }
-
-  private _jwtToken: string;
-  private _jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-
-  authenticate(req) {
-    this._jwtToken = this._jwtFromRequest(req);
-    super.authenticate(req);
   }
 }

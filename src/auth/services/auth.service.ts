@@ -137,22 +137,22 @@ export class AuthService {
       // 2、生成 ID Token OIDC
       const idToken = this.jwtService.sign({
         ...payload,
-        iss: this.configService.get('IDP_DOMAIN'),
-        aud: client.clientId,
-        iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + 3600, // 1小时
+        iss: this.configService.get('IDP_DOMAIN'), // 签发者
+        aud: client.clientId, // 受众
+        iat: Math.floor(Date.now() / 1000), // 签发时间
+        exp: Math.floor(Date.now() / 1000) + 3600, // 过期时间
       });
 
       // 3、生成 Refresh Token
       const refreshToken = this.jwtService.sign(payload, {
         expiresIn: refreshTokenExpiresIn,
       });
-      const refreshTokenExpireSeconds = 7 * 24 * 3600; // 7天
+      const refreshTokenExpirySeconds = 7 * 24 * 3600; // 7天
       await this.redisClient.set(
         `refresh_token:${refreshToken}`,
         user.id,
         'EX',
-        refreshTokenExpireSeconds,
+        refreshTokenExpirySeconds,
       );
       // 记录用户的有效刷新令牌，用于全局登出
       await this.redisClient.sadd(
@@ -395,7 +395,9 @@ export class AuthService {
       }
 
       // 2. 验证令牌签名和有效期
-      const payload = await this.jwtService.verifyAsync(accessToken);
+      const payload = this.jwtService.verify(accessToken, {
+        ignoreExpiration: true,
+      });
       return payload;
     } catch (error) {
       throw new UnauthorizedException('无效的访问令牌');
